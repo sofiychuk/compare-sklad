@@ -239,7 +239,7 @@ export default {
   top: 0;
   left: 0;
   /* border: 1px solid black; */
-  background-color: ;
+  background-color: lightblue;
   width: 250px;
   height: 100vh;
 }
