@@ -1,6 +1,7 @@
 
 <template>
   <div class="main-sklad">
+    <p class="count">{{count}}</p>
     <button @click="saveInObj" class="main-sklad-btn">Зберегти</button>
     <p>
       Статус:
@@ -32,6 +33,7 @@ export default {
   data() {
     return {
       // mainSkladObject: {},
+      count: 0,
       article: "",
       quantity: "",
       degRefresh1: 0,
@@ -63,6 +65,8 @@ export default {
       }
       this.$emit('mainSkladObject', mainSkladObject)
         console.log(mainSkladObject);
+        this.count = Object.keys(mainSkladObject).length;
+        console.log("saveInObj -> count", this.count)
     },
     refreshArticle(e) {
       this.mainSkladStatus = false;
@@ -88,6 +92,16 @@ export default {
 </script>
 
 <style scoped>
+.count{
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  padding: 0;
+  margin: 0;
+}
+.main-sklad{
+  position: relative;
+}
 textarea {
   height: calc(100vh - 175px) !important;
   padding-right: 15px;

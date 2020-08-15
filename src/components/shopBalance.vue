@@ -1,6 +1,7 @@
 
 <template>
   <div class="shop-sklad">
+        <p class="count">{{count}}</p>
     <div class="sizeTrigger" >
       <div class="switch-btn" @click="triggerSize"></div>
       <p>Вкл/Викл розмір</p>
@@ -64,6 +65,7 @@ export default {
   data() {
     return {
       // shopSkladObject: {},
+      count: 0,
       article: "",
       size: "",
       quantity: "",
@@ -105,6 +107,7 @@ export default {
         }
       }
       this.$emit("shopSkladObject", shopSkladObject);
+       this.count = Object.keys(shopSkladObject).length;
       console.log(shopSkladObject);
     },
     triggerSize(e) {
@@ -145,6 +148,13 @@ textarea {
 }
 .shop-sklad {
   position: relative;
+}
+.count{
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  padding: 0;
+  margin: 0;
 }
 .shop-sklad .wrapper-textarea:first-child, .shop-sklad .wrapper-textarea:nth-child(2){
   margin-right: 5px;

@@ -1,26 +1,59 @@
 
 <template>
-  <div class="other-sklad">
+   <div class="other-sklad">
+         <p class="count">{{count}}</p>
+    <div class="sizeTrigger" >
+      <div class="switch-btn" @click="triggerSize"></div>
+      <p>Вкл/Викл розмір</p>
+    </div>
     <button @click="saveInObj" class="other-sklad-btn">Зберегти</button>
     <p>
       Статус:
       <span v-if="otherSkladStatus" class="green">Збережено</span>
       <span v-else class="red">Незбережено</span>
     </p>
-    <p class="violet">
+    <p class="orange">
       <b>Додатковий склад</b>
     </p>
     <div class="wrapper">
       <div class="wrapper-textarea">
-        <textarea name="article" id="other-sklad-article" cols="12" rows="50" v-model="article" placeholder="Артикуль"></textarea>
+        <textarea
+          name="article"
+          id="other-sklad-article"
+          cols="12"
+          rows="50"
+          v-model="article"
+          placeholder="Артикуль"
+        ></textarea>
         <button class="refresh" @click="refreshArticle">
           <img src="../assets/arrow2.png" class="arrow-refresh" id="first" alt />
         </button>
       </div>
       <div class="wrapper-textarea">
-        <textarea name="quantity" id="other-sklad-quantity" cols="12" rows="50" v-model="quantity" placeholder="Кількість"></textarea>
-        <button class="refresh" @click="refreshArticle">
+        <textarea
+          name="size"
+          id="other-sklad-size"
+          cols="12"
+          rows="50"
+          v-model="size"
+          placeholder="Розмір"
+          :disabled="sizeDisabled"
+        ></textarea>
+        <button class="refresh" @click="refreshArticle" :disabled="sizeDisabled">
           <img src="../assets/arrow2.png" class="arrow-refresh" id="second" alt />
+        </button>
+      </div>
+      <div class="wrapper-textarea">
+        <textarea
+          name="quantity"
+          id="other-sklad-quantity"
+          cols="12"
+          rows="50"
+          v-model="quantity"
+          placeholder="Кількість"
+        ></textarea>
+        <button class="refresh" @click="refreshArticle">
+          <img src="../assets/arrow2.png" class="arrow-refresh" id="third" alt />
         </button>
       </div>
     </div>
@@ -32,11 +65,15 @@ export default {
   data() {
     return {
       // otherSkladObject: {},
+        count: 0,
       article: "",
+      size: "",
       quantity: "",
       degRefresh1: 0,
       degRefresh2: 0,
+      degRefresh3: 0,
       otherSkladStatus: false,
+      sizeDisabled: true,
     };
   },
   computed: {
@@ -46,23 +83,36 @@ export default {
     saveInObj() {
       let otherSkladObject = {};
       let key1 = this.article.split("\n");
-      let key2 = this.quantity.split("\n");
-
+      let key2 = this.size.split("\n");
+      let key3 = this.quantity.split("\n");
+      if (!this.sizeDisabled) {
+        let result = key1.map((item, i) => {
+          return (item += "-" + key2[i]);
+        });
+        key1 = result
+        console.log("gavno", result);
+      }
       key1.forEach((item, index) => {
-        otherSkladObject[item] = key2[index];
-      
+        otherSkladObject[item] = key3[index];
       });
       for (let key in otherSkladObject) {
         if (key.length > 0 && otherSkladObject[key].length > 0) {
           this.otherSkladStatus = true;
-        } else {
-          alert("Котусік! Має бути заповнено обов'язково дві колонки додаткового складу!");
+        } else  {
+          alert(
+            "Котусік! Має бути заповнено обов'язково всі колонки магазинного складу!"
+          );
           this.otherSkladStatus = false;
           otherSkladObject = {};
         }
       }
-      this.$emit('otherSkladObject', otherSkladObject)
-        console.log(otherSkladObject);
+      this.$emit("otherSkladObject", otherSkladObject);
+      console.log(otherSkladObject);
+       this.count = Object.keys(otherSkladObject).length;
+    },
+    triggerSize(e) {
+      e.target.classList.toggle("switch-on");
+      this.sizeDisabled = !this.sizeDisabled;
     },
     refreshArticle(e) {
       this.otherSkladStatus = false;
@@ -72,10 +122,14 @@ export default {
         this.article = "";
         this.degRefresh1 += 360;
         degRefresh = this.degRefresh1;
-      } else {
-        this.quantity = "";
+      } else if (choseRefresh.getAttribute("id") == "second") {
+        this.size = "";
         this.degRefresh2 += 360;
         degRefresh = this.degRefresh2;
+      } else {
+        this.quantity = "";
+        this.degRefresh3 += 360;
+        degRefresh = this.degRefresh3;
       }
 
       choseRefresh.setAttribute(
@@ -88,12 +142,63 @@ export default {
 </script>
 
 <style scoped>
+.count{
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  padding: 0;
+  margin: 0;
+}
+.other-sklad{
+  position: relative;
+}
 textarea {
   height: calc(100vh - 175px) !important;
   padding-right: 15px;
 }
 .other-sklad .wrapper-textarea:first-child{
   margin-right: 5px;
+}
+.switch-btn {
+  display: inline-block;
+  width: 50px; /* ширина */
+  height: 25px; /* высота */
+  border-radius: 19px; /* радиус скругления */
+  background: #bfbfbf; /* цвет фона */
+  z-index: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition-duration: 300ms; /* анимация */
+}
+.switch-btn::after {
+  content: "";
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #fff; /* цвет кнопки */
+  top: 3px; /* положение кнопки по вертикали относительно основы */
+  left: 3px; /* положение кнопки по горизонтали относительно основы */
+  transition-duration: 300ms; /* анимация */
+  position: absolute;
+  z-index: 1;
+}
+.switch-on {
+  background: #118c4e;
+}
+.switch-on::after {
+  left: 27px;
+}
+.sizeTrigger {
+  position: absolute;
+  margin: 15px 5px;
+}
+.sizeTrigger p {
+  font-size: 10px;
+  margin: 0;
+  padding: 0;
 }
 p {
   margin: 10px 0;
