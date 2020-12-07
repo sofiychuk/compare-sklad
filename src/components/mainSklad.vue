@@ -13,7 +13,7 @@
     </p>
     <div class="wrapper">
       <div class="wrapper-textarea">
-        <textarea name="article" id="main-sklad-article" cols="12" rows="530" v-model="article" placeholder="Артикуль"></textarea>
+        <textarea name="article" id="main-sklad-article" cols="12" rows="530" v-model="article" placeholder="Артикул"></textarea>
         <button class="refresh" @click="refreshArticle">
           <img src="../assets/arrow2.png" class="arrow-refresh" id="first" alt />
         </button>

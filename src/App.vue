@@ -6,7 +6,7 @@
       <div class="checkbox-result">
         <p>Вибір елементів результату:</p>
         <input id="article" type="checkbox" value="Article" v-model="checkboxResult" />
-        <label for="article">Артикуль</label>
+        <label for="article">Артикул</label>
         <br />
         <input id="quantity" type="checkbox" value="Quantity" v-model="checkboxResult" />
         <label for="quantity">Кількість</label>

@@ -23,7 +23,7 @@
           cols="12"
           rows="50"
           v-model="article"
-          placeholder="Артикуль"
+          placeholder="Артикул"
         ></textarea>
         <button class="refresh" @click="refreshArticle">
           <img src="../assets/arrow2.png" class="arrow-refresh" id="first" alt />
